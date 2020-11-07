@@ -75,10 +75,19 @@ services:
     build:
       context: ./ml-console
     container_name: ml-console
+    working_dir: /scripts
     networks:
       private:
     volumes:
       - ./ml-console/scripts:/scripts:rw
+
+  ml-crawler:
+    <<: *x-logging-opts
+    build:
+      context: ./ml-crawler
+    container_name: ml-crawler
+    networks:
+      private:
 
 networks:
   private:
