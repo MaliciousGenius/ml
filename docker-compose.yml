@@ -1,0 +1,85 @@
+version: '3.6'
+
+x-logging-opts: &x-logging-opts
+  logging:
+    driver: 'json-file'
+    options:
+      max-size: '20M'
+      max-file: '5'
+
+services:
+
+  clickhouse:
+    <<: *x-logging-opts
+    image: yandex/clickhouse-server
+    container_name: ${NAME}-clickhouse
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    networks:
+      private:
+        aliases:
+          - clickhouse.local
+          - clickhouse
+    ports:
+      - '8123:8123/tcp'
+      - '9000:9000/tcp'
+      - '9363:9363/tcp'
+    volumes:
+      - ./ch-conf:/etc/clickhouse-server:ro
+      - ./_vol-ch-data:/var/lib/clickhouse:rw
+      - ./_vol-ch-log:/var/log/clickhouse-server:rw
+    healthcheck:
+      test: "clickhouse-client --port=9000 --query='SELECT 1'"
+
+  zookeeper:
+    <<: *x-logging-opts
+    image: wurstmeister/zookeeper
+    container_name: ${NAME}-zookeeper
+    networks:
+      private:
+        aliases:
+          - zookeeper.local
+          - zookeeper
+    ports:
+      - '2181:2181/tcp'
+    healthcheck:
+      test: ["CMD-SHELL", "zkServer.sh", "status"]
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: ${NAME}-kafka
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    networks:
+      private:
+        aliases:
+          - kafka.local
+          - kafka
+    ports:
+      - '9092:9092/tcp'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./_vol-kafka-data:/kafka:rw
+    links:
+      - zookeeper
+    depends_on:
+      - zookeeper
+    healthcheck:
+      test: ["CMD-SHELL", "/bin/kafka-healthcheck.sh"]
+
+  ml-console:
+    <<: *x-logging-opts
+    build:
+      context: ./ml-console
+    container_name: ml-console
+    networks:
+      private:
+    volumes:
+      - ./ml-console/scripts:/scripts:rw
+
+networks:
+  private:
+    name: ml_private

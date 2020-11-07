@@ -1,15 +1,18 @@
-.PHONY: default
-default: build run
+.PHONY: *
 
-.PHONY: build
-build:
-	pipreqs --force
-	docker build -t ml .
+export NAME?=$(shell echo $(shell basename $(shell pwd)) | awk '{print tolower($0)}')
 
-.PHONY: run
-run:
-	docker run --rm -v ${PWD}/data:/data ml
+$(NAME): image
+	@docker-compose up -d
+	@docker-compose run $(NAME)-console /bin/bash
 
-.PHONY: local-dep
-local-dep:
-	pip3 install pipreqs
+image:
+	@docker-compose build
+
+clean:
+	@docker-compose down
+	@rm -rf ./_vol*
+
+info:
+	@docker-compose logs
+	@docker-compose ps
