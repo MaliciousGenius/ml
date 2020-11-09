@@ -1,4 +1,4 @@
-CREATE TABLE urlsQueue (
+CREATE TABLE UrlsQueue (
   url String
 ) ENGINE = Kafka
 SETTINGS kafka_broker_list = 'kafka.local:9092',
@@ -9,11 +9,13 @@ SETTINGS kafka_broker_list = 'kafka.local:9092',
          kafka_num_consumers = 1,
          kafka_max_block_size = 1048576;
 
-CREATE TABLE urls (
-  createdDate DateTime DEFAULT now() COMMENT 'Created time',
+CREATE TABLE Urls (
+  time DateTime DEFAULT now(),
+  id UUID DEFAULT generateUUIDv4(),
   url String
 ) ENGINE = MergeTree
-PARTITION BY toYYYYMM(createdDate)
-ORDER BY (createdDate);
+PARTITION BY toYYYYMM(time)
+ORDER BY (time);
 
-CREATE MATERIALIZED VIEW urlsMV TO urls AS SELECT * FROM urlsQueue;
+CREATE MATERIALIZED VIEW UrlsMV TO Urls
+  AS SELECT * FROM UrlsQueue;

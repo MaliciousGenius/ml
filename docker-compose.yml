@@ -86,8 +86,12 @@ services:
     build:
       context: ./ml-crawler
     container_name: ml-crawler
+    environment:
+      CLICKHOUSE_HOST: clickhouse.local
     networks:
       private:
+    volumes:
+      - ./ml-crawler/scripts:/scripts:rw
 
 networks:
   private:
