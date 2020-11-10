@@ -11,4 +11,4 @@ sleep 2s
 echo "{\"url\":\"https://ru.wikipedia.org/wiki/Утки\"}" | kafkacat -P -b kafka.local:9092 -t urls
 sleep 5s
 clickhouse-client --host=clickhouse.local --query='select * from Urls;'
-kafkacat -C -b kafka.local:9092 -t urls
+# kafkacat -C -b kafka.local:9092 -t urls

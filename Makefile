@@ -4,7 +4,8 @@ export NAME?=$(shell echo $(shell basename $(shell pwd)) | awk '{print tolower($
 
 $(NAME): image
 	@docker-compose up -d
-	@docker-compose run $(NAME)-console /bin/bash
+	@docker-compose run $(NAME)-console /bin/bash -c "sleep 30s && /scripts/pipeline.sh"
+	@docker-compose run $(NAME)-crawler /usr/bin/python3 /scripts/q1.py
 
 image:
 	@docker-compose build
