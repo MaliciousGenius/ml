@@ -91,7 +91,7 @@ services:
     networks:
       private:
     volumes:
-      - ./ml-crawler/scripts:/scripts:rw
+      - ./ml-crawler/workers:/workers:rw
 
 networks:
   private:

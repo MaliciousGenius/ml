@@ -1,0 +1,1 @@
+* * * * * root /usr/bin/python3 /workers/u1.py > /dev/stdout

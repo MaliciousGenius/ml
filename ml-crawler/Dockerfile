@@ -44,28 +44,31 @@ RUN echo $TIMEZONE > /etc/timezone ; \
     ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime ; \
     dpkg-reconfigure --frontend=noninteractive tzdata ;
 
+# tools
+RUN apt install --quiet --yes --no-install-recommends \
+        bash bash-completion \
+        cron ;
+
 # python 3
 RUN apt install --quiet --yes --no-install-recommends \
         python3-minimal python3 python3-dev python3-doc python3-examples \
         python3-pip ;
-
-# tools
-RUN apt install --quiet --yes --no-install-recommends \
-        bash bash-completion \
-        curl wget \
-        tar unzip bzip2 xz-utils \
-        make \
-        inetutils-ping \
-        ansible ;
-
-# utils
-RUN apt install --quiet --yes --no-install-recommends \
-        mc htop iotop \
-        clickhouse-client kafkacat ;
+RUN pip3 install clickhouse_driver ;
 
 # clearnup apt
 RUN apt autoremove --yes ; \
     apt clean ; \
     rm -rf /var/lib/apt/lists/* ;
 
-RUN pip3 install clickhouse_driver
+# add crontab file in the cron directory
+ADD cron /etc/cron.d/workers
+ 
+# give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/workers ; \
+    crontab /etc/cron.d/workers ;
+ 
+# create the log file to be able to run tail
+RUN touch /var/log/cron.log
+ 
+# run the command on container startup
+CMD ["cron", "-f"]

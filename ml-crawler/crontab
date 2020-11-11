@@ -1,2 +1,0 @@
-# Add Cron Here
-* * * * * echo $(date)
