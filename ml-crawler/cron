@@ -1,1 +1,0 @@
-*/1 * * * * /usr/bin/python3 /workers/u1.py >> /workers/u1.log 2>&1

@@ -1,0 +1,1 @@
+*/1 * * * * /usr/bin/python3 /workers/urls.py >> /var/log/workers/urls.log 2>&1

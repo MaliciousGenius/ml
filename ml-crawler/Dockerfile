@@ -61,17 +61,11 @@ RUN apt autoremove --yes ; \
     rm -rf /var/lib/apt/lists/* ;
 
 # add crontab file in the cron directory
-ADD cron /etc/cron.d/workers
- 
-# give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/workers ; \
-    crontab /etc/cron.d/workers ;
- 
-# create the log file to be able to run tail
-RUN touch /var/log/cron.log
+ADD scheduler /etc/cron.d/scheduler
 
-ARG CLICKHOUSE_HOST
-ENV CLICKHOUSE_HOST=$CLICKHOUSE_HOST
+# give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/scheduler ; \
+    crontab /etc/cron.d/scheduler ;
 
 # run the command on container startup
-CMD touch /var/log/cron.log && cron -f && tail -f /workers/u1.log
+CMD cron -f
