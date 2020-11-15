@@ -66,3 +66,6 @@ RUN apt install --quiet --yes --no-install-recommends \
 RUN apt autoremove --yes ; \
     apt clean ; \
     rm -rf /var/lib/apt/lists/* ;
+
+# run the command on container startup
+CMD sleep 30s && /scripts/pipeline.sh

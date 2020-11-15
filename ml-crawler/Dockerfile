@@ -69,6 +69,9 @@ RUN chmod 0644 /etc/cron.d/workers ; \
  
 # create the log file to be able to run tail
 RUN touch /var/log/cron.log
- 
+
+ARG CLICKHOUSE_HOST
+ENV CLICKHOUSE_HOST=$CLICKHOUSE_HOST
+
 # run the command on container startup
-CMD ["cron", "-f"]
+CMD touch /var/log/cron.log && cron -f && tail -f /workers/u1.log

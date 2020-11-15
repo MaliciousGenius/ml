@@ -92,6 +92,7 @@ services:
       private:
     volumes:
       - ./ml-crawler/workers:/workers:rw
+      # - ./_vol-ml-log:/var/log:rw
 
 networks:
   private:

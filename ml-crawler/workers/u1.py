@@ -1,7 +1,7 @@
-#! /usr/bin/python3
+#!/usr/bin/env python3
 
 """
-Создание таблиц в CH
+
 """
 
 import os
@@ -11,7 +11,7 @@ def get_url(client):
     return(client.execute("SELECT url FROM Urls LIMIT 1"))
 
 if __name__ == "__main__":
-    CLICKHOUSE_HOST = os.environ.get('CLICKHOUSE_HOST') or 'localhost'
+    CLICKHOUSE_HOST = os.environ.get('CLICKHOUSE_HOST') or 'clickhouse.local'
     client = Client(CLICKHOUSE_HOST)
     result = get_url(client)
     print(result)
