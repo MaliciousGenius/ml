@@ -70,6 +70,20 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "/bin/kafka-healthcheck.sh"]
 
+  redis:
+    <<: *x-logging-opts
+    image: redis:latest
+    container_name: ${NAME}-redis
+    networks:
+      private:
+        aliases:
+          - redis.local
+          - redis
+    ports:
+      - '6379:6379/tcp'
+    volumes:
+      - ./_vol-redis-data:/data:rw
+
   ml-console:
     <<: *x-logging-opts
     build:

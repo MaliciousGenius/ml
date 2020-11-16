@@ -53,7 +53,7 @@ RUN apt install --quiet --yes --no-install-recommends \
 RUN apt install --quiet --yes --no-install-recommends \
         python3-minimal python3 python3-dev python3-doc python3-examples \
         python3-pip ;
-RUN pip3 install clickhouse_driver ;
+RUN pip3 install clickhouse_driver kafka redis;
 
 # clearnup apt
 RUN apt autoremove --yes ; \
