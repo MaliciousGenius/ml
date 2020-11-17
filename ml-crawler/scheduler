@@ -1,1 +1,1 @@
-*/1 * * * * /usr/bin/python3 /workers/urls.py >> /var/log/workers/urls.log 2>&1
+*/1 * * * * cd /workers && python3 -m UrlsStream >> /var/log/workers/UrlsStream.log 2>&1

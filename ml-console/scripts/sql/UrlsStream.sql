@@ -9,13 +9,14 @@ SETTINGS kafka_broker_list = 'kafka.local:9092',
          kafka_num_consumers = 1,
          kafka_max_block_size = 1048576;
 
-CREATE TABLE Urls (
-  time DateTime DEFAULT now(),
+CREATE TABLE UrlsStream (
   id UUID DEFAULT generateUUIDv4(),
-  url String
+  url String,
+  status Enum8('true' = 1, 'false' = 0) DEFAULT 0,
+  time DateTime DEFAULT now()
 ) ENGINE = MergeTree
 PARTITION BY toYYYYMM(time)
 ORDER BY (time);
 
-CREATE MATERIALIZED VIEW UrlsMV TO Urls
+CREATE MATERIALIZED VIEW UrlsMaterializedView TO UrlsStream
   AS SELECT * FROM UrlsQueue;
