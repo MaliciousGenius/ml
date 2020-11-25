@@ -10,7 +10,6 @@ RUN apt update --quiet ; \
 # configure deb-backend
 RUN echo "debconf debconf/frontend select noninteractive" | debconf-set-selections ; \
     dpkg-reconfigure --frontend=noninteractive debconf ; \
-    # do not exclude man pages & other documentation
     rm /etc/dpkg/dpkg.cfg.d/excludes ;
 
 # install some the packages to full system provision
@@ -53,7 +52,7 @@ RUN apt install --quiet --yes --no-install-recommends \
 RUN apt install --quiet --yes --no-install-recommends \
         python3-minimal python3 python3-dev python3-doc python3-examples \
         python3-pip ;
-RUN pip3 install clickhouse_driver kafka redis html2text bs4 nltk ;
+RUN pip3 install redis ;
 
 # clearnup apt
 RUN apt autoremove --yes ; \
@@ -66,6 +65,9 @@ ADD scheduler /etc/cron.d/scheduler
 # give execution rights on the cron job
 RUN chmod 0644 /etc/cron.d/scheduler ; \
     crontab /etc/cron.d/scheduler ;
+
+COPY requirements.txt requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # run the command on container startup
 CMD cron -f
