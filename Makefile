@@ -13,6 +13,7 @@ image:
 clean:
 	@docker-compose down
 	@rm -rf ./_vol*
+	@rm -rf ./ml-crawler/workers/*/__pycache__
 
 info:
 	@docker-compose logs

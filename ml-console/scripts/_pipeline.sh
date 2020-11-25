@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-# sleep 5s
-(exec "./init.sh")
+sleep 20s
 (exec "./run.sh")
 
-# sleep 5s
+sleep 61s
 (exec "./status.sh")

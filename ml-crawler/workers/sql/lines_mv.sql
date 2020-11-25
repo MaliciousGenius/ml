@@ -1,0 +1,2 @@
+CREATE MATERIALIZED VIEW IF NOT EXISTS LinesSync TO LinesStream
+  AS SELECT line FROM LinesQueue;
