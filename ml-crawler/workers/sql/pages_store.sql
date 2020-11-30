@@ -7,6 +7,10 @@ CREATE TABLE IF NOT EXISTS PagesStore (
     'analyzed' = 2,
     'filled' = 3
   ) DEFAULT 0,
+  seed Enum8(
+    'false' = 0,
+    'true' = 1
+  ) DEFAULT 0,
   link_uuid UUID,
   date Date DEFAULT toDate(time),
   time DateTime DEFAULT now()

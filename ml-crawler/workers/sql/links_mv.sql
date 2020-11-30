@@ -1,3 +1,3 @@
 CREATE MATERIALIZED VIEW IF NOT EXISTS LinksSync TO LinksStream
-  AS SELECT link FROM LinksQueue;
+  AS SELECT * FROM LinksQueue;
 

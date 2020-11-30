@@ -2,7 +2,7 @@
 
 from Lines import clickhouse_client, redis_client
 
-def get_new_pages(client):
+def get_cached_pages(client):
     return(client.execute("SELECT * FROM PagesStore WHERE tag=1"))
 
 # def check_page_existence(client, link_uuid):
@@ -32,10 +32,12 @@ def get_new_pages(client):
 #     return(client.execute("INSERT INTO PagesStore (link_uuid) VALUES (\'{}\')".format(link_uuid)))
 
 def main():
-    pages = get_new_pages(clickhouse_client)
+    pages = get_cached_pages(clickhouse_client)
     if len(pages) > 0:
         for page in pages:
-            print(page)
+            pass
+            # print(page)
+            # print(redis_client.get("\'{}\'".format(page[3])))
             # if check_page_existence(clickhouse_client, link[1]):
             #     if check_cache_existence(redis_client, link[1]):
             #         update_tag_of_link(clickhouse_client, link[1])

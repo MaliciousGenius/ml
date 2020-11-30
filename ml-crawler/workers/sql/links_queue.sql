@@ -1,5 +1,9 @@
 CREATE TABLE IF NOT EXISTS LinksQueue (
-  link String
+  link String,
+  seed Enum8(
+    'false' = 0,
+    'true' = 1
+  )
 ) ENGINE = Kafka
 SETTINGS kafka_broker_list = 'kafka.local:9092',
          kafka_topic_list = 'links',
